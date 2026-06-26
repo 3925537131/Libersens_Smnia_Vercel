@@ -1,5 +1,6 @@
 import "./globals.css";
 import { CartProvider } from "@/components/CartProvider";
+import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <CartProvider>
+          <SmoothScroll />
           <Header />
           <main>{children}</main>
           <Footer />

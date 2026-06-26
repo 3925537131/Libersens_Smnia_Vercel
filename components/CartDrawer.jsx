@@ -23,7 +23,7 @@ export default function CartDrawer() {
           </button>
         </div>
 
-        <div className="cart__body">
+        <div className="cart__body" data-lenis-prevent>
           {lines.length === 0 ? (
             <p className="cart__empty">Your bag is empty.<br />The bedroom awaits.</p>
           ) : (
