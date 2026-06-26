@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" fill="none">
+  <rect width="400" height="500" fill="#f4f4f6"/>
+  <rect x="120" y="200" width="50" height="130" rx="10" fill="#f7bcd0"/>
+  <rect x="180" y="170" width="50" height="160" rx="10" fill="#f24a7d"/>
+  <rect x="240" y="210" width="50" height="120" rx="10" fill="#14141a"/>
+  <text x="200" y="470" text-anchor="middle" font-family="Helvetica" font-size="13" letter-spacing="3" fill="#0a0a0b" opacity="0.5">CARE KIT</text>
+</svg>

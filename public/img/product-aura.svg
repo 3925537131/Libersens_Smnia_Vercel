@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" fill="none">
+  <defs>
+    <radialGradient id="ga" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="55%" stop-color="#f7bcd0"/>
+      <stop offset="100%" stop-color="#f24a7d"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="500" fill="#f4f4f6"/>
+  <circle cx="200" cy="240" r="110" fill="url(#ga)"/>
+  <circle cx="200" cy="240" r="150" stroke="#f24a7d" stroke-width="1.5" opacity="0.3" fill="none"/>
+  <text x="200" y="470" text-anchor="middle" font-family="Helvetica" font-size="14" letter-spacing="3" fill="#0a0a0b" opacity="0.5">AURA</text>
+</svg>
