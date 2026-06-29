@@ -2,24 +2,41 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Mark from "./Mark";
 import { useCart } from "./CartProvider";
 import { CartIcon, SearchIcon, BurgerIcon, CloseIcon } from "./icons";
 
+// Each item rolls to its `alt` word on hover (à la somnia: Stories → Mythos).
 const NAV = [
-  { label: "Love Machine", href: "/products/model-l" },
-  { label: "Shop", href: "/shop" },
-  { label: "Encounters", href: "/stories" },
-  { label: "Stories", href: "/stories" },
-  { label: "About", href: "/about" },
+  { label: "Love Machine", alt: "Her", href: "/products/model-l" },
+  { label: "Shop", alt: "Shells", href: "/shop" },
+  { label: "Encounters", alt: "Closer", href: "/stories" },
+  { label: "Stories", alt: "Mythos", href: "/stories" },
+  { label: "About", alt: "Origin", href: "/about" },
 ];
+
+function NavLink({ item, onClick }) {
+  return (
+    <Link href={item.href} className="nav__item" onClick={onClick}>
+      <span className="nav__roll">
+        <span>{item.label}</span>
+        <span aria-hidden="true">{item.alt}</span>
+      </span>
+    </Link>
+  );
+}
 
 export default function Header() {
   const { count, open } = useCart();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [onDark, setOnDark] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const headerRef = useRef(null);
+  const searchRef = useRef(null);
+  const searchInputRef = useRef(null);
   const pathname = usePathname();
 
   // Transparent header: sample the background sitting just below the bar and
@@ -71,6 +88,30 @@ export default function Header() {
     };
   }, [pathname]);
 
+  // Search popup: focus on open, close on outside-click or Escape.
+  useEffect(() => {
+    if (!searchOpen) return;
+    searchInputRef.current?.focus();
+    const onDown = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) setSearchOpen(false);
+    };
+    const onKey = (e) => { if (e.key === "Escape") setSearchOpen(false); };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [searchOpen]);
+
+  function onSearchSubmit(e) {
+    e.preventDefault();
+    const q = query.trim();
+    setSearchOpen(false);
+    // Search isn't wired to a backend yet — route to the shop with the query.
+    router.push(q ? `/shop?q=${encodeURIComponent(q)}` : "/shop");
+  }
+
   return (
     <>
       <header ref={headerRef} className={`header ${onDark ? "header--on-dark" : ""}`}>
@@ -90,12 +131,35 @@ export default function Header() {
 
           <nav className="nav">
             {NAV.map((n) => (
-              <Link key={n.label} href={n.href}>{n.label}</Link>
+              <NavLink key={n.label} item={n} />
             ))}
           </nav>
 
           <div className="header__actions">
-            <Link href="/shop" aria-label="Search"><SearchIcon /></Link>
+            <div className="search" ref={searchRef}>
+              <button
+                aria-label="Search"
+                aria-expanded={searchOpen}
+                onClick={() => setSearchOpen((v) => !v)}
+              >
+                {searchOpen ? <CloseIcon /> : <SearchIcon />}
+              </button>
+              <form
+                className={`search__pop ${searchOpen ? "open" : ""}`}
+                onSubmit={onSearchSubmit}
+                role="search"
+              >
+                <SearchIcon />
+                <input
+                  ref={searchInputRef}
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search Libersens…"
+                  aria-label="Search Libersens"
+                />
+              </form>
+            </div>
             <button aria-label="Open cart" onClick={open}>
               <CartIcon />
               {count > 0 && <span className="cart-count">{count}</span>}

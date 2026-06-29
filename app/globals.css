@@ -122,12 +122,42 @@ button { font-family: inherit; }
 .logo { display: inline-flex; align-items: center; gap: 10px; color: currentColor; font-size: 17px; letter-spacing: -0.02em; }
 .mark { width: 26px; height: 26px; display: inline-block; }
 .nav { display: flex; gap: clamp(18px, 2.4vw, 36px); justify-content: center; }
-.nav a {
+.nav__item {
   font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: currentColor; opacity: 0.85; transition: opacity 0.2s;
+  color: currentColor; opacity: 0.85; line-height: 1.2;
+  display: inline-block; transition: opacity 0.28s var(--ease);
 }
-.nav a:hover { opacity: 1; }
+/* Hovering one item dims the others (somnia-style focus). */
+.nav:hover .nav__item { opacity: 0.4; }
+.nav:hover .nav__item:hover { opacity: 1; }
+/* Word roll: label slides up, alternate word slides in. */
+.nav__roll { display: block; position: relative; overflow: hidden; height: 1.2em; }
+.nav__roll span { display: block; height: 1.2em; line-height: 1.2em; transition: transform 0.42s var(--ease); }
+.nav__item:hover .nav__roll span { transform: translateY(-100%); }
+
 .header__actions { display: flex; gap: 20px; justify-content: flex-end; align-items: center; }
+
+/* Search icon + mini popup bar (opens to the left of the icon). */
+.search { position: relative; display: inline-flex; }
+.search__pop {
+  position: absolute; top: 50%; right: calc(100% + 14px);
+  transform: translateY(-50%) scaleX(0.92); transform-origin: right center;
+  display: flex; align-items: center; gap: 8px;
+  width: min(260px, calc(100vw - 96px));
+  background: var(--cream); color: var(--black);
+  border: 1px solid rgba(10, 10, 11, 0.12); border-radius: 999px;
+  padding: 9px 16px; box-shadow: 0 10px 30px rgba(10, 10, 11, 0.14);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.28s var(--ease), transform 0.28s var(--ease);
+}
+.search__pop.open { opacity: 1; pointer-events: auto; transform: translateY(-50%) scaleX(1); }
+.search__pop svg { width: 16px; height: 16px; opacity: 0.5; flex: none; }
+.search__pop input {
+  border: 0; background: none; outline: none; width: 100%;
+  font-family: var(--font); font-size: 13px; color: var(--black); letter-spacing: 0.02em;
+}
+.search__pop input::placeholder { color: rgba(10, 10, 11, 0.4); }
+.search__pop input::-webkit-search-cancel-button { -webkit-appearance: none; }
 .header__actions button, .header__actions a {
   color: currentColor; display: inline-flex; position: relative;
   background: none; border: 0; cursor: pointer; padding: 0;
